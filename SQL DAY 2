@@ -1,0 +1,187 @@
+MariaDB [jashu]> create table student8(s_regno int(20),s_name varchar(30),s_rollno int(40),s_marks int(50));
+Query OK, 0 rows affected (0.010 sec)
+
+MariaDB [jashu]> desc student8;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| s_regno  | int(20)     | YES  |     | NULL    |       |
+| s_name   | varchar(30) | YES  |     | NULL    |       |
+| s_rollno | int(40)     | YES  |     | NULL    |       |
+| s_marks  | int(50)     | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+4 rows in set (0.008 sec)
+
+MariaDB [jashu]> insert into student8 values(094,"jaswanth",021,95),(095,"akbar",023,75),(096,"hema",024,65);
+Query OK, 3 rows affected (0.002 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [jashu]> select s_regno,s_name,s_rollno,s_marks from student8 order by s_rollno desc;
++---------+----------+----------+---------+
+| s_regno | s_name   | s_rollno | s_marks |
++---------+----------+----------+---------+
+|      96 | hema     |       24 |      65 |
+|      95 | akbar    |       23 |      75 |
+|      94 | jaswanth |       21 |      95 |
++---------+----------+----------+---------+
+3 rows in set (0.000 sec)
+
+MariaDB [jashu]> select s_regno,s_name,s_rollno,s_marks from student8 where s_marks like'4_';
+Empty set (0.000 sec)
+
+MariaDB [jashu]> select s_regno,s_name,s_rollno,s_marks from student8 where s_marks like'7_';
++---------+--------+----------+---------+
+| s_regno | s_name | s_rollno | s_marks |
++---------+--------+----------+---------+
+|      95 | akbar  |       23 |      75 |
++---------+--------+----------+---------+
+1 row in set (0.000 sec)
+
+MariaDB [jashu]> select count(*) from student8;
++----------+
+| count(*) |
++----------+
+|        3 |
++----------+
+1 row in set (0.000 sec)
+
+MariaDB [jashu]> select min(s_marks) form student8;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'student8' at line 1
+MariaDB [jashu]> select min(s_marks) from student8;
++--------------+
+| min(s_marks) |
++--------------+
+|           65 |
++--------------+
+1 row in set (0.000 sec)
+
+MariaDB [jashu]> select min(s_rollno) from student8;
++---------------+
+| min(s_rollno) |
++---------------+
+|            21 |
++---------------+
+1 row in set (0.000 sec)
+
+MariaDB [jashu]> select avg(s_marks) from student8;
++--------------+
+| avg(s_marks) |
++--------------+
+|      78.3333 |
++--------------+
+1 row in set (0.000 sec)
+
+MariaDB [jashu]> select s_regno,sum(s_rollno) from student8 group by s_regno;
++---------+---------------+
+| s_regno | sum(s_rollno) |
++---------+---------------+
+|      94 |            21 |
+|      95 |            23 |
+|      96 |            24 |
++---------+---------------+
+3 rows in set (0.000 sec)
+
+MariaDB [jashu]> select s_name,sum(s_rollno) from student8 group by name;
+ERROR 1054 (42S22): Unknown column 'name' in 'group statement'
+MariaDB [jashu]> select s_name,sum(s_rollno) from student8 group by s_name;
++----------+---------------+
+| s_name   | sum(s_rollno) |
++----------+---------------+
+| akbar    |            23 |
+| hema     |            24 |
+| jaswanth |            21 |
++----------+---------------+
+3 rows in set (0.000 sec)
+
+MariaDB [jashu]> create table food(f_name varchar(20),f_price int(30),f_city);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+MariaDB [jashu]> create table food(f_name varchar(20),f_price int(30),f_city varchar(40));
+Query OK, 0 rows affected (0.012 sec)
+
+MariaDB [jashu]> insert into food values("dosa",45,karanataka),("idly",45,"chennai"),("biryani",130,"chennai");
+ERROR 1054 (42S22): Unknown column 'karanataka' in 'field list'
+MariaDB [jashu]> insert into food values("dosa",45,"kA"),("idly",45,"TN"),("biryani",130,"TN");
+Query OK, 3 rows affected (0.003 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [jashu]> select f_name,sum(f_price) from food group by f_price;
++---------+--------------+
+| f_name  | sum(f_price) |
++---------+--------------+
+| dosa    |           90 |
+| biryani |          130 |
++---------+--------------+
+2 rows in set (0.000 sec)
+
+MariaDB [jashu]> select f_name,sum(f_price) from food group by f_city;
++--------+--------------+
+| f_name | sum(f_price) |
++--------+--------------+
+| dosa   |           45 |
+| idly   |          175 |
++--------+--------------+
+2 rows in set (0.000 sec)
+
+MariaDB [jashu]> select f_name,avg(f_price) from food group by f_city;
++--------+--------------+
+| f_name | avg(f_price) |
++--------+--------------+
+| dosa   |      45.0000 |
+| idly   |      87.5000 |
++--------+--------------+
+2 rows in set (0.000 sec)
+
+MariaDB [jashu]> select f_name,max(f_price) from food group by f_city;
++--------+--------------+
+| f_name | max(f_price) |
++--------+--------------+
+| dosa   |           45 |
+| idly   |          130 |
++--------+--------------+
+2 rows in set (0.000 sec)
+
+MariaDB [jashu]> select f_name,max(f_price) from food group by f_name;
++---------+--------------+
+| f_name  | max(f_price) |
++---------+--------------+
+| biryani |          130 |
+| dosa    |           45 |
+| idly    |           45 |
++---------+--------------+
+3 rows in set (0.000 sec)
+
+MariaDB [jashu]> select f_name,avg(f_price) from food group by f_name;
++---------+--------------+
+| f_name  | avg(f_price) |
++---------+--------------+
+| biryani |     130.0000 |
+| dosa    |      45.0000 |
+| idly    |      45.0000 |
++---------+--------------+
+3 rows in set (0.000 sec)
+
+MariaDB [jashu]> select * from food
+    -> union
+    -> select * from student8;
+ERROR 1222 (21000): The used SELECT statements have a different number of columns
+MariaDB [jashu]> select * from food union select * from student8;
+ERROR 1222 (21000): The used SELECT statements have a different number of columns
+MariaDB [jashu]> alter table food add(income int(9));
+Query OK, 0 rows affected (0.010 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [jashu]> select * from student8
+    -> select * from student8;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'select * from student8' at line 2
+MariaDB [jashu]> select * from student8 union select * from food;
++---------+----------+----------+---------+
+| s_regno | s_name   | s_rollno | s_marks |
++---------+----------+----------+---------+
+| 94      | jaswanth | 21       |      95 |
+| 95      | akbar    | 23       |      75 |
+| 96      | hema     | 24       |      65 |
+| dosa    | 45       | kA       |    NULL |
+| idly    | 45       | TN       |    NULL |
+| biryani | 130      | TN       |    NULL |
++---------+----------+----------+---------+
+6 rows in set (0.000 sec)
